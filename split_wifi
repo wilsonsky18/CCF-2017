@@ -1,0 +1,155 @@
+-- first split ;
+drop table if exists temp_train;
+CREATE TABLE temp_train
+AS
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 1) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 2) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 3) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 4) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 5) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 6) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 7) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 8) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 9) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 10) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new;
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 11) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 12) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 13) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 14) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 15) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 16) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 17) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';',18) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 19) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new
+UNION
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi_infos, ';', 20) AS wifi
+FROM (
+	SELECT *
+	FROM merge_train
+) wifi_new;
+CREATE TABLE jpc_train
+AS
+-- second split |
+SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
+	, split_part(wifi, '|', 1) AS wifi_id
+	, split_part(wifi, '|', 2) AS signal
+	, split_part(wifi, '|', 3) AS connect
+FROM (
+	SELECT *
+	FROM temp_train
+	WHERE wifi IS NOT NULL
+		and wifi != ''
+) e;
