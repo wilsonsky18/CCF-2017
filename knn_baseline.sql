@@ -63,3 +63,14 @@ FROM (
 	FROM prj_tc_231620_98365_yrdets.jpc_knn_test
 ) temp2;
 
+DROP TABLE IF EXISTS jpc_knn_train;
+CREATE TABLE IF NOT EXISTS jpc_knn_train
+AS
+SELECT shop_id, longitude, latitude, CAST(mall_id AS INT) AS mall_id
+FROM jpc_knn_data_process_train;
+
+DROP TABLE IF EXISTS jpc_knn_test;
+CREATE TABLE IF NOT EXISTS jpc_knn_test
+AS
+SELECT row_id, longitude, latitude, CAST(mall_id AS INT) AS mall_id
+FROM jpc_knn_data_process_test;
