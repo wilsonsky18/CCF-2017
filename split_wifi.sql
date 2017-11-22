@@ -1,4 +1,5 @@
 -- first split ;
+DROP TABLE IF EXISTS temp_train;
 CREATE TABLE temp_train
 AS
 SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
@@ -139,9 +140,11 @@ FROM (
 	SELECT *
 	FROM merge_train
 ) wifi_new;
+
+-- second split |
+DROP TABLE IF EXISTS jpc_train;
 CREATE TABLE jpc_train
 AS
--- second split |
 SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
 	, split_part(wifi, '|', 1) AS wifi_id
 	, split_part(wifi, '|', 2) AS signal
@@ -154,6 +157,7 @@ FROM (
 ) e;
 
 --filter wifi number <15 and >7000
+DROP TABLE IF EXISTS jpc_wifi_filter;
 CREATE TABLE IF NOT EXISTS jpc_wifi_filter
 AS
 SELECT COUNT(wifi_id) AS wifi_count, wifi_id
@@ -163,6 +167,7 @@ HAVING wifi_count < 7000
 AND wifi_count > 15;
 
 -- join the trian to wifi_filter
+DROP TABLE IF EXISTS jpc_second_train;
 CREATE TABLE IF NOT EXISTS jpc_second_train
 AS
 SELECT temp1.user_id, temp1.mall_id, temp1.shop_id, temp1.longitude, temp1.latitude
@@ -170,3 +175,9 @@ SELECT temp1.user_id, temp1.mall_id, temp1.shop_id, temp1.longitude, temp1.latit
 FROM jpc_train temp1
 JOIN jpc_wifi_filter temp2
 ON temp1.wifi_id = temp2.wifi_id
+
+
+
+--DROP TABLE IF EXISTS temp_train;
+DROP TABLE IF EXISTS jpc_train;
+DROP TABLE IF EXISTS jpc_wifi_filter;
