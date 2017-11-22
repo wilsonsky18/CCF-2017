@@ -1,5 +1,4 @@
 -- first split ;
-drop table if exists temp_train;
 CREATE TABLE temp_train
 AS
 SELECT user_id, shop_id, mall_id, time_stamp, longitude, latitude
