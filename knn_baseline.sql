@@ -42,3 +42,24 @@ CREATE TABLE IF NOT EXISTS jpc_knn_test
 AS
 SELECT longitude, latitude, mall_id
 FROM prj_tc_231620_98365_yrdets.ant_tianchi_ccf_sl_test; 
+
+DROP TABLE IF EXISTS jpc_knn_data_process_train;
+CREATE TABLE IF NOT EXISTS jpc_knn_data_process_train
+AS
+SELECT shop_id, longitude, latitude
+	, split_part(mall_id, '_', 2) AS mall_id
+FROM (
+	SELECT *
+	FROM prj_tc_231620_98365_yrdets.jpc_knn_train
+) temp1;
+
+DROP TABLE IF EXISTS jpc_knn_data_process_test;
+CREATE TABLE IF NOT EXISTS jpc_knn_data_process_test
+AS
+SELECT row_id, longitude, latitude
+	, split_part(mall_id, '_', 2) AS mall_id
+FROM (
+	SELECT *
+	FROM prj_tc_231620_98365_yrdets.jpc_knn_test
+) temp2;
+
