@@ -75,4 +75,8 @@ AS
 SELECT row_id, longitude, latitude, CAST(mall_id AS INT) AS mall_id
 FROM jpc_knn_data_process_test;
 
-
+DROP TABLE IF EXISTS prj_tc_231620_98365_yrdets.ant_tianchi_ccf_sl_predict;
+CREATE TABLE IF NOT EXISTS ant_tianchi_ccf_sl_predict
+AS
+SELECT row_id, prediction_result AS shop_id
+FROM knn_predict;
