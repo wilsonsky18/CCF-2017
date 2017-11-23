@@ -74,3 +74,5 @@ CREATE TABLE IF NOT EXISTS jpc_knn_test
 AS
 SELECT row_id, longitude, latitude, CAST(mall_id AS INT) AS mall_id
 FROM jpc_knn_data_process_test;
+
+
