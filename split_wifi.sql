@@ -156,15 +156,16 @@ FROM (
 		and wifi != ''
 ) e;
 
---filter wifi number <15 and >7000
+--filter wifi number between 5 - 10000
 DROP TABLE IF EXISTS jpc_wifi_filter;
 CREATE TABLE IF NOT EXISTS jpc_wifi_filter
 AS
 SELECT COUNT(wifi_id) AS wifi_count, wifi_id
 FROM jpc_train
 GROUP BY wifi_id
-HAVING wifi_count < 7000
-AND wifi_count > 15;
+HAVING wifi_count 
+BETWEEN 5
+AND 10000;
 
 -- join the trian to wifi_filter
 DROP TABLE IF EXISTS jpc_second_train;
