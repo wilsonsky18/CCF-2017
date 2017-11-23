@@ -21,6 +21,7 @@ FROM prj_tc_231620_98365_yrdets.ant_tianchi_ccf_sl_shop_info e1
 JOIN prj_tc_231620_98365_yrdets.ant_tianchi_ccf_sl_user_shop_behavior e2
 ON e1.shop_id = e2.shop_id;
 
+--提取shop_Info中的经纬度，mall，shop信息
 DROP TABLE IF EXISTS lon_la_shop_info;
 CREATE TABLE IF NOT EXISTS lon_la_shop_info
 AS
@@ -63,6 +64,7 @@ FROM (
 	FROM prj_tc_231620_98365_yrdets.jpc_knn_test
 ) temp2;
 
+--这部分输入机器学习平台PAi
 DROP TABLE IF EXISTS jpc_knn_train;
 CREATE TABLE IF NOT EXISTS jpc_knn_train
 AS
@@ -75,6 +77,7 @@ AS
 SELECT row_id, longitude, latitude, CAST(mall_id AS INT) AS mall_id
 FROM jpc_knn_data_process_test;
 
+--创建最终预测表
 DROP TABLE IF EXISTS prj_tc_231620_98365_yrdets.ant_tianchi_ccf_sl_predict;
 CREATE TABLE IF NOT EXISTS ant_tianchi_ccf_sl_predict
 AS
