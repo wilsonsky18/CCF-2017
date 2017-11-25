@@ -10,6 +10,6 @@ drop table if exists temp_1309_result;
 create table if not exists temp_1309_result as
 select distinct(row_id),shop_id from (
 select row_id,shop_id,prob_rank from (
-select  row_id, shop_id, prob, rank() OVER (partition by row_id order by prob desc ) as prob_rank from m_1309_prob) a where prob_rank=1) b;
+select  row_id, shop_id, prob, rank() over (partition by row_id order by prob desc ) as prob_rank from m_1309_prob) a where prob_rank=1) b;
 select count(*) from temp_1309_result; 
 select count(distinct row_id) from test_m_1309 ; 
