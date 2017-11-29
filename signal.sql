@@ -27,7 +27,7 @@ select count(distinct wifi_id) from jpc_wifi_train;
 --用规则生成预测集合
 drop table if exists jpc_wifi_test_temp;
 create table if not exists jpc_wifi_test_temp as
-select row_id, shop_id,num,row_number() over (partition by row_id order by num desc) rank_wifi from(
+select row_id, shop_id,wifi_id,num,row_number() over (partition by row_id order by num desc) rank_wifi from(
 select temp2.row_id,temp1.wifi_id,temp1.shop_id,temp1.num from jpc_wifi_train temp1 join jpc_second_test temp2 on temp1.wifi_id=temp2.wifi_id) temp3;
 drop table if exists jpc_wifi_test ;
 create table if not exists jpc_wifi_test as
