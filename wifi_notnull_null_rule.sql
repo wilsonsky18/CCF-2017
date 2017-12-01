@@ -79,3 +79,44 @@ select count(distinct row_id) from ant_tianchi_ccf_sl_predict result where resul
 select count(*) from  ant_tianchi_ccf_sl_test;  --2402119
 select count(*) from  ant_tianchi_ccf_sl_predict; --2402119
 
+
+
+
+
+
+
+--null wifi 按搜索到次数排序
+drop table if exists jpc_wifi_null_rule;
+create table if not exists jpc_wifi_null_rule as
+select shop_id,wifi_id,wifi_num from (
+select shop_id,wifi_id,wifi_num, rank() over(partition by shop_id order by wifi_num desc) wifi_rank from(
+select shop_id,wifi_id,count(wifi_id) wifi_num from jpc_wifi_null_train group by wifi_id,shop_id) temp) temp1 where wifi_rank = 1;
+
+select count(distinct wifi_id) from jpc_wifi_null_rule; --290715 distinct wifi_id
+select count(*) from jpc_wifi_null_rule; --331801
+
+drop table if exists jpc_wifi_null_test_result;
+create table if not exists jpc_wifi_null_test_result as
+select row_id,shop_id from (
+select temp2.row_id,temp1.wifi_id,temp1.shop_id,temp1.wifi_num from jpc_wifi_null_rule temp1 join jpc_wifi_null_test  temp2 on temp1.wifi_id=temp2.wifi_id) temp3;
+select count(distinct row_id) from jpc_wifi_null_test;   --882158
+select count(*) from jpc_wifi_null_test_result where shop_id is not null; --851571
+
+--union null和notnull的结果
+drop table if exists union_null_notnull_result;
+create table if not exists union_null_notnull_result as
+select * from prj_tc_231620_98365_yrdets.jpc_wifi_notnull_test_result a
+union 
+select * from prj_tc_231620_98365_yrdets.jpc_wifi_null_test_result b; 
+
+--生成预测结果
+drop table if exists ant_tianchi_ccf_sl_predict;
+create table if not exists ant_tianchi_ccf_sl_predict  as
+select row_id,shop_id from
+(select temp2.row_id,temp1.shop_id from union_null_notnull_result temp1 right outer join test_row_id temp2
+on temp1.row_id=temp2.row_id) temp;
+
+select count(*) from  union_null_notnull_result; --1972392
+select count(distinct row_id) from ant_tianchi_ccf_sl_predict result where result.shop_id is null; --429727
+select count(*) from  ant_tianchi_ccf_sl_test;  --2402119
+select count(*) from  ant_tianchi_ccf_sl_predict; --2402119
