@@ -20,9 +20,10 @@ select user_id,row_id,mall_id,wifi_id,longitude,latitude from jpc_test where sig
 
 select count(distinct row_id) from jpc_wifi_null_test;   --882158
 
-drop table if exists jpc_wifi_null_test_result;
 create table if not exists jpc_wifi_null_test_result as
-select row_id, shop_id from(
-select temp2.row_id,temp1.wifi_id,temp1.shop_id from jpc_wifi_null_rule  temp1 join jpc_wifi_null_test  temp2 on temp1.wifi_id=temp2.wifi_id) temp3;
+select row_id,shop_id from (
+select row_id, shop_id,rank() over(partition by row_id order by wifi_num) rank_wifi from(
+select temp2.row_id,temp1.wifi_id,temp1.shop_id,temp1.wifi_num from jpc_wifi_null_rule_final temp1 join jpc_wifi_null_test  temp2 on temp1.wifi_id=temp2.wifi_id) temp3) temp4 
+where rank_wifi = 1;
 
-select count(*) from jpc_wifi_null_test_result where shop_id is not null; --939227
+select count(*) from jpc_wifi_null_test_result where shop_id is not null; --467107
