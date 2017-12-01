@@ -20,3 +20,20 @@ create table if not exists jpc_wifi_notnull_test_result as
 select row_id,shop_id from jpc_wifi_notnull_test_temp where rank_wifi=1;
 
 select count(*) from  jpc_wifi_notnull_test where shop_id is not null;   -- 1505285
+
+
+drop table if exists union_null_notnull_result;
+create table if not exists union_null_notnull_result as
+select * from prj_tc_231620_98365_yrdets.jpc_wifi_notnull_test_result a
+union 
+select * from prj_tc_231620_98365_yrdets.jpc_wifi_null_test_result b; 
+
+select count(*) from  union_null_notnull_result; --1987068
+
+drop table if exists ant_tianchi_ccf_sl_predict;
+create table if not exists ant_tianchi_ccf_sl_predict  as
+select row_id,shop_id from
+(select temp2.row_id,temp1.shop_id from union_null_notnull_result temp1 right outer join test_row_id temp2
+on temp1.row_id=temp2.row_id) temp;
+
+select count(*) from  ant_tianchi_ccf_sl_predict; --2402119
