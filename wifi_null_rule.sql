@@ -10,7 +10,7 @@ select shop_id,wifi_id,count(wifi_id) wifi_num from jpc_wifi_null_train group by
 
 drop table if exists jpc_wifi_null_rule_final;
 create table if not exists jpc_wifi_null_rule_final as
-select wifi_id,shop_id from (
+select wifi_id,shop_id,wifi_num from (
 select *,row_number() over (partition by wifi_id order by wifi_num desc) rank_wifi from jpc_wifi_null_rule) temp where rank_wifi=1; 
 select count(*) from jpc_wifi_null_rule_final ; --25212 wifi_id
 
