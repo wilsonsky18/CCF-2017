@@ -30,16 +30,17 @@ select row_id,shop_id from jpc_wifi_notnull_test_temp where rank_wifi=1;
 select count(distinct row_id) from  jpc_wifi_notnull_test;  -- 1519961
 select count(*) from  jpc_wifi_notnull_test_result where shop_id is not null;   -- 1505285
 
---null wifi 按搜索到次数排序
-drop table if exists jpc_wifi_null_rule;
-create table if not exists jpc_wifi_null_rule as
-select shop_id,wifi_id,wifi_num from (
-select shop_id,wifi_id,wifi_num, rank() over(partition by shop_id order by wifi_num desc) wifi_rank from(
-select shop_id,wifi_id,count(wifi_id) wifi_num from jpc_wifi_null_train group by wifi_id,shop_id) temp) temp1 where wifi_rank = 1;
+--null wifi 按一shop搜索到不同wifi次数排序，统计的是每个shop下不同的wifi个数。
+--drop table if exists jpc_wifi_null_rule;
+--create table if not exists jpc_wifi_null_rule as
+--select shop_id,wifi_id,wifi_num from (
+--select shop_id,wifi_id,wifi_num, rank() over(partition by shop_id order by wifi_num desc) wifi_rank from(
+--select shop_id,wifi_id,count(wifi_id) wifi_num from jpc_wifi_null_train group by wifi_id,shop_id) temp) temp1 where wifi_rank = 1;
 
-select count(distinct wifi_id) from jpc_wifi_null_rule --25212 distinct wifi_id
-select count(*) from jpc_wifi_null_rule; --30137 25212 distinct wifi_id
+--select count(distinct wifi_id) from jpc_wifi_null_rule --25212 distinct wifi_id
+--select count(*) from jpc_wifi_null_rule; --30137
 
+--null wifi 按一个wifi被不同shop搜索到次数排序，统计的是每个wifi下不同shop的个数。
 drop table if exists jpc_wifi_null_rule;
 create table if not exists jpc_wifi_null_rule as
 select wifi_id,shop_id,shop_num from (
