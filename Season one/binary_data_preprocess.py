@@ -1,8 +1,8 @@
 import pandas as pd
 
-df=pd.read_csv('~/Tianchi/训练数据-ccf_first_round_user_shop_behavior.csv')
-shop_info=pd.read_csv('~/Tianchi/训练数据-ccf_first_round_shop_info.csv')
-test=pd.read_csv('~/Tianchi/AB榜测试集-evaluation_public.csv')
+df=pd.read_csv('训练数据-ccf_first_round_user_shop_behavior.csv')
+shop_info=pd.read_csv('训练数据-ccf_first_round_shop_info.csv')
+test=pd.read_csv('AB榜测试集-evaluation_public.csv')
 df=pd.merge(df,shop_info[['shop_id','mall_id']],how='left',on='shop_id')
 train=pd.concat([df,test])
 train['time_stamp']=pd.to_datetime(train['time_stamp'])
@@ -19,8 +19,8 @@ for mall in mall_list:
         wifi_list = [wifi.split('|') for wifi in row['wifi_infos'].split(';')]
         wifi_dict = {}
         for i in wifi_list:
+            #每行新增wifi_id特征，填充为对应信号强度
             row[i[0]] = int(i[1])  # 列索引为ID,值为强度
-            # if row[i[2]] == 'true': row['wifi_con'] = str(row[i[0]])  # 连上的wifi_id
             if i[0] not in wifi_dict:
                 wifi_dict[i[0]] = 1  # 计数,以过滤wifi
             else:
@@ -38,4 +38,4 @@ for mall in mall_list:
                 new[n] = row[n]
         m.append(new)
     train_mall = pd.DataFrame(m)
-    train_mall.to_csv('~/Tianchi/treated_data/'+mall+'.csv', index = False)
+    train_mall.to_csv('treated_data/'+mall+'.csv', index = False)
