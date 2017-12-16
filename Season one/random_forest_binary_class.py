@@ -1,12 +1,14 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
-shop_info=pd.read_csv('~/Tianchi/训练数据-ccf_first_round_shop_info.csv')
+
+shop_info=pd.read_csv('训练数据-ccf_first_round_shop_info.csv')
 mall_list=list(set(list(shop_info.mall_id)))
 print(mall_list)
 for mall in mall_list:
     data_mall = pd.read_csv('~/Tianchi/treated_data/'+mall+'.csv')
     train_mall = data_mall[data_mall['shop_id'].notnull()]
     test_mall = data_mall[data_mall['shop_id'].isnull()]
+    #生成概率输出
     candidate_list = ['cls1','prob1','cls2','prob2','cls3','prob3','cls4','prob4','cls5','prob5']
     for x in candidate_list: test_mall[x] = 0.0
     count = 0
@@ -21,7 +23,7 @@ for mall in mall_list:
         train = pd.concat([train_pos,train_neg])
         clf_rf = RandomForestClassifier(n_estimators=100,oob_score=True)
         clf_rf.fit(train[features].fillna(-100),train['label'])
-        pos_prob = clf_rf.predict_proba(test_mall[features].fillna(-100))[:,1]
+        pos_prob = clf_rf.predict_proba(test_mall[features].fillna(-100))[:,1] #取出概率最高的
         test_mall[shop] = pos_prob #总集合,在此基础上生成候选集
         count += 1
         print(count)
@@ -33,4 +35,4 @@ for mall in mall_list:
         mall_result.append(row[['row_id']+candidate_list])
     mall_result = pd.DataFrame(mall_result)
     mall_result['row_id'] = mall_result['row_id'].astype('int')
-    mall_result.to_csv('~/Tianchi/sub_binary_rf.csv', index=False)
+    mall_result.to_csv('binary_rf.csv', index=False)
